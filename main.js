@@ -1,3 +1,4 @@
+// Sender's information
 let sendersInfo = {
   names: "Ediana Ekanem",
   accountNumber: "3098161276",
@@ -12,7 +13,7 @@ let receiverInfo = {
   accountNumber: "2634895601",
   balance: 10000,
   pin: 2267,
-  bankName: "Uba",
+  bankName: "uba",
 };
 
 // Function to prompt the user for pin and validate it
@@ -40,43 +41,96 @@ function withdrawal() {
 
 // Function to perform transfer
 function transfer() {
-  let receiverBank = prompt("Enter receiver's bank:");
+  let receiverBankOption = prompt(`Select receiver's bank:
+1. Access
+2. UBA
+3. Union
+4. GTB
+5. FCMB
+6. First
+7. Zenith
+Enter the corresponding number for the bank:`);
+
+  let receiverBank;
+  switch (receiverBankOption) {
+    case "1":
+      receiverBank = "Access";
+      break;
+    case "2":
+      receiverBank = "UBA";
+      break;
+    case "3":
+      receiverBank = "Union";
+      break;
+    case "4":
+      receiverBank = "GTB";
+      break;
+    case "5":
+      receiverBank = "FCMB";
+      break;
+    case "6":
+      receiverBank = "First";
+      break;
+    case "7":
+      receiverBank = "Zenith";
+      break;
+    default:
+      alert("Invalid bank selection. Transaction canceled.");
+      return;
+  }
+
   let receiverAccNumber = prompt("Enter receiver's account number:");
 
-  // Display receiver details for confirmation
-  alert(`Receiver's Name: ${receiverInfo.names}
-      Receiver's Bank: ${receiverBank}
-      Receiver's Account Number: ${receiverAccNumber}`);
+  // Check if receiver's account number and bank are correct
+  if (
+    receiverAccNumber !== receiverInfo.accountNumber ||
+    receiverBank.toLowerCase() !== receiverInfo.bankName.toLowerCase()
+  ) {
+    alert(
+      `Receiver's bank or account number is not correct. 
+  Transaction canceled.`
+    );
+    return;
+  }
 
-  let amount = prompt("Enter the amount you want to transfer:");
+  // Display receiver details for confirmation
+  alert(`Receiver's Bank Name: ${receiverInfo.names}
+Receiver's Bank: ${receiverBank}
+Receiver's Account Number: ${receiverAccNumber}`);
+
+  let amount = prompt("Kindly enter the transfer amount:");
   amount = parseInt(amount);
   let description = prompt("Enter description for the transfer:");
 
-  // Confirm transaction
+  // Confirm transaction with transfer details
   let confirmTransfer = confirm(
-    `Transfer ${amount} to ${receiverBank} account ${receiverAccNumber}?`
+    `Are you sure you want to transfer ${amount} 
+to ${receiverInfo.names}'s of ${receiverBank} Bank
+with account number of ${receiverAccNumber}
+Description: ${description}  ?
+
+Please click OK to proceed or Cancel to cancel the transfer.`
   );
   if (confirmTransfer) {
     // Deduct from sender's balance
     if (amount <= sendersInfo.balance) {
       sendersInfo.balance -= amount;
-    } else {
-      alert("Insufficient funds. Transaction canceled.");
-      return;
-    }
+      // Update receiver's balance
+      receiverInfo.balance += amount;
 
-    // Update receiver's balance
-    receiverInfo.balance += amount;
-
-    // Display transaction details
-    alert(`Transfer successful!
+      // Display transaction details
+      alert(`Transfer successful!
         Sender's previous balance: ${sendersInfo.balance + amount}
         Sender's current balance: ${sendersInfo.balance}
+
         Receiver's previous balance: ${receiverInfo.balance - amount}
         Receiver's current balance: ${receiverInfo.balance}
         Description: ${description}`);
 
-    alert("Thank you for banking with us!");
+      alert("Thank you for banking with us!");
+    } else {
+      alert("Insufficient funds. Transaction canceled.");
+    }
   } else {
     alert("Transfer canceled.");
   }
@@ -89,9 +143,9 @@ let initializeTransaction = prompt(
 if (initializeTransaction.toLowerCase() === "yes") {
   if (enterPin()) {
     alert(
-      `Welcome ${sendersInfo.names}! 
-        Bank: ${sendersInfo.bankName}, 
-        Account Number: ${sendersInfo.accountNumber}`
+      `Welcome ${sendersInfo.names}
+Bank: ${sendersInfo.bankName}
+Account Number: ${sendersInfo.accountNumber}`
     );
 
     let transactionType = prompt("Click 1 for withdrawal and 2 for transfer:");
