@@ -17,7 +17,7 @@ let receiverInfo = {
 };
 
 // Function to prompt the user for pin and validate it
-function enterPin() {
+const enterPin = () => {
   let enteredPin = prompt("Please enter your PIN to proceed:");
   if (parseInt(enteredPin) === sendersInfo.pin) {
     return true;
@@ -25,22 +25,29 @@ function enterPin() {
     alert("Incorrect PIN. Transaction canceled.");
     return false;
   }
-}
+};
 
 // Function to perform withdrawal
-function withdrawal() {
+const withdrawal = () => {
   let amount = prompt("Enter the amount you want to withdraw:");
   amount = parseInt(amount);
+
+  // Check if the entered amount is not a number or is less than or equal to 0
+  if (isNaN(amount) || amount <= 0) {
+    alert("Invalid amount. Transaction Canceled");
+    return;
+  }
+
   if (amount <= sendersInfo.balance) {
     sendersInfo.balance -= amount;
     alert(`Withdrawal successful! Your new balance is ${sendersInfo.balance}`);
   } else {
     alert("Insufficient funds. Transaction canceled.");
   }
-}
+};
 
 // Function to perform transfer
-function transfer() {
+const transfer = () => {
   let receiverBankOption = prompt(`Select receiver's bank:
 1. Access
 2. UBA
@@ -109,7 +116,7 @@ to ${receiverInfo.names}'s of ${receiverBank} Bank
 with account number of ${receiverAccNumber}
 Description: ${description}  ?
 
-Please click OK to proceed or Cancel to cancel the transfer.`
+Please click OK to proceed or Cancel to terminate this transaction.`
   );
   if (confirmTransfer) {
     // Deduct from sender's balance
@@ -134,7 +141,7 @@ Please click OK to proceed or Cancel to cancel the transfer.`
   } else {
     alert("Transfer canceled.");
   }
-}
+};
 
 // Main program
 let initializeTransaction = prompt(
