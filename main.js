@@ -107,6 +107,12 @@ Receiver's Account Number: ${receiverAccNumber}`);
 
   let amount = prompt("Kindly enter the transfer amount:");
   amount = parseInt(amount);
+
+  // Validate the amount
+  if (isNaN(amount) || amount <= 0) {
+    alert("Invalid amount. Transaction canceled.");
+    return;
+  }
   let description = prompt("Enter description for the transfer:");
 
   // Confirm transaction with transfer details
